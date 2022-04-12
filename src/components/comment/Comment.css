@@ -1,0 +1,9 @@
+.commentList{
+    text-align: left;
+}
+.comment{
+    padding-left: 0px;
+}
+.comment > p{
+    font-size: 12px;
+}
