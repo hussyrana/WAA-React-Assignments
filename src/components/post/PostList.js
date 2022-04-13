@@ -21,9 +21,6 @@ const PostList = (props) => {
       id={p.id}
       title={p.title}
       author={p.author}
-      postClick={(id) => {
-        props.specificPostClick(id);
-      }}
     />
   ));
   return <div className="postList">{postsJsx}</div>;
