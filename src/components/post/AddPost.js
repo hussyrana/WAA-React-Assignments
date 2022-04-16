@@ -1,8 +1,10 @@
 import axios from "axios";
 import React, { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Post.css";
-const AddPost = (props) => {
+const AddPost = () => {
   const postFormRef = useRef();
+  const navigate = useNavigate();
 
   const handleAddButton = (e) => {
     e.preventDefault();
@@ -14,10 +16,10 @@ const AddPost = (props) => {
         userId: "2",
       })
       .then((res) => {
-        postFormRef.current["title"].value='';
-        postFormRef.current["content"].value='';
-        postFormRef.current["author"].value='';
-        props.handleUpdateFlag();
+        postFormRef.current["title"].value = "";
+        postFormRef.current["content"].value = "";
+        postFormRef.current["author"].value = "";
+        navigate("/posts");
       })
       .catch((err) => {
         console.log(err.message);

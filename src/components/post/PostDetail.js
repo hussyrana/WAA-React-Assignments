@@ -1,41 +1,61 @@
 import axios from "axios";
-import React, { useMemo } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import CommentList from "../comment/CommentList";
 import "./Post.css";
 const PostDetail = (props) => {
+
+  const params = useParams();
+  const navigate = useNavigate();
+  const [postDetail, setPostDetail] = useState({});
+
+  useEffect(() => {
+    if (params.id) {
+      axios
+        .get("http://localhost:8080/api/v1/posts/" + params.id)
+        .then((res) => {
+          setPostDetail(res.data);
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
+    }
+  }, [params.id]);
+
   const handleDeleteButton = () => {
     axios
-      .delete("http://localhost:8080/api/v1/posts/" + props.id)
+      .delete("http://localhost:8080/api/v1/posts/" + params.id)
       .then((res) => {
-        props.handleUpdateFlag();
+        navigate("/");
       })
       .catch((err) => {
         console.log(err.message);
       });
   };
-  return (
-    <>
-      <div>
-        <h5>{props.title}</h5>
-        <h6>{props.author}</h6>
-        <p>{props.content}</p>
+
+  let postDetails = null;
+  if (params.id) {
+    postDetails = (
+      <div className="postDetail">
+        <div>
+          <h5>{postDetail.title}</h5>
+          <h6>{postDetail.author}</h6>
+          <p>{postDetail.content}</p>
+        </div>
+        <div>
+          <CommentList comments={postDetail.comments} />
+        </div>
+        <div>
+          <button className="button">edit</button>
+          <button onClick={handleDeleteButton} className="button">
+            delete
+          </button>
+        </div>
       </div>
-      <div>
-        {useMemo(
-          () => (
-            <CommentList comments={props.comments} />
-          ),
-          [props.id]
-        )}
-      </div>
-      <div>
-        <button className="button">edit</button>
-        <button onClick={handleDeleteButton} className="button">
-          delete
-        </button>
-      </div>
-    </>
-  );
+    );
+  }
+
+  return postDetails;
 };
 
 export default PostDetail;

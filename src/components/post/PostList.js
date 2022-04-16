@@ -3,6 +3,8 @@ import Post from "./Post";
 import { useState, useEffect } from "react";
 import "./Post.css";
 import axios from "axios";
+import PostDetail from "./PostDetail";
+import { Link } from "react-router-dom";
 
 const PostList = (props) => {
   const [posts, setPosts] = useState([]);
@@ -16,14 +18,18 @@ const PostList = (props) => {
       .catch(console.error());
   }, [props.updateFlag]);
   const postsJsx = posts.map((p) => (
-    <Post
-      key={p.id}
-      id={p.id}
-      title={p.title}
-      author={p.author}
-    />
+    <Link to={`${p.id}`} className="post" key={p.id}>
+      <Post id={p.id} title={p.title} author={p.author} />
+    </Link>
   ));
-  return <div className="postList">{postsJsx}</div>;
+  return (
+    <>
+      <div className="postList">{postsJsx}</div>
+      <div>
+        <PostDetail />
+      </div>
+    </>
+  );
 };
 
 export default PostList;
